@@ -7,6 +7,7 @@ class Homescreen extends StatefulWidget {
   @override
   State<Homescreen> createState() => _HomescreenState();
 }
+
 class _HomescreenState extends State<Homescreen> {
   double result = 0;
   final TextEditingController controller = TextEditingController();
@@ -14,6 +15,14 @@ class _HomescreenState extends State<Homescreen> {
   void initState() {
     super.initState();
   }
+
+  //dispose method used to dispose the things from widget tree to ensure to prevent memory or data leakage
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +35,7 @@ class _HomescreenState extends State<Homescreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'INR $result',
+                'INR ${result != 0 ? result.toStringAsFixed(3) : result.toStringAsFixed(0)}', //shows upto 3 digits after decimsl point
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -51,22 +60,21 @@ class _HomescreenState extends State<Homescreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton(
-                  
                     onPressed: () {
                       //this is used when we use print statement in debug mode
                       // if (kDebugMode) {
                       //   print("button clicked");
                       // }
                       setState(() {
-                        result = double.parse(controller.text)*85;
+                        result = double.parse(controller.text) * 85;
                       });
                       controller.clear();
                     },
-                    style: TextButton.styleFrom( //simply use this instead of materials tate property
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      minimumSize: Size(double.infinity, 50)
-                    ),
+                    style: TextButton.styleFrom(
+                        //simply use this instead of materials tate property
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        minimumSize: Size(double.infinity, 50)),
                     child: Text("Convert")),
               )
             ],
